@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jantina Mulder | Game developer</title>
+<meta name="description" content="Portfolio van Jantina Mulder, game developer en all-round game designer. Unity, GameMaker, eigen editors voor designers, VR en teamwerk.">
+<meta property="og:title" content="Jantina Mulder | Game developer">
+<meta property="og:description" content="Ik programmeer speelbare games in Unity en GameMaker, en bouw de tools waarmee ontwerpers zelf verder kunnen.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0D1B3A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230D1B3A'/%3E%3Cpath d='M50 12Q54 46 88 50Q54 54 50 88Q46 54 12 50Q46 46 50 12Z' fill='%23FFE9A8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+
+<script>
+/* Zet taal en thema voordat de pagina getekend wordt, zodat er geen flits is. */
+(function () {
+  var l = "nl";
+  try {
+    var q = new URLSearchParams(location.search).get("lang");
+    var s = localStorage.getItem("lang");
+    if (q === "en" || q === "nl") l = q; else if (s === "en" || s === "nl") l = s;
+  } catch (e) {}
+  document.documentElement.lang = l;
+
+  var theme = null;
+  try {
+    theme = localStorage.getItem("theme");
+  } catch (e) {}
+  if (theme !== "light" && theme !== "dark") {
+    theme = "light";
+  }
+  document.documentElement.setAttribute("data-theme", theme);
+})();
+</script>
+
+<style>
+:root {
+  --sky: #0D1B3A;
+  --sky-line: #3C5384;
+  --paper: #E9F0F8;
+  --paper-2: #F6F9FC;
+  --ink: #10233F;
+  --ink-soft: #465A7C;
+  --line: #B9C8DC;
+  --teal: #00688F;
+  --violet: #6D2FD6;
+  --star: #FFE9A8;
+  --on-sky: #F3F7FF;
+  --on-sky-soft: #B9CCE8;
+  --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --serif: "Literata", Georgia, "Times New Roman", serif;
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  --sky: #05070F;
+  --sky-line: #202B45;
+  --paper: #0E1729;
+  --paper-2: #131F36;
+  --ink: #E9F0F8;
+  --ink-soft: #93A7CB;
+  --line: #24314F;
+  --teal: #5FD6E8;
+  --violet: #B58CFF;
+  --star: #FFE9A8;
+  --on-sky: #F3F7FF;
+  --on-sky-soft: #B9CCE8;
+  color-scheme: dark;
+}
+
+/* Taalwissel: elk element krijgt data-l="nl" of data-l="en" */
+html[lang="nl"] [data-l="en"] { display: none !important; }
+html[lang="en"] [data-l="nl"] { display: none !important; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .2s ease, color .2s ease;
+}
+img, svg, video { max-width: 100%; }
+a { color: var(--teal); text-underline-offset: 3px; }
+a:hover { color: var(--violet); }
+:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; border-radius: 4px; }
+.on-sky :focus-visible, .site-header :focus-visible { outline-color: var(--star); }
+
+.wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
+
+.skip {
+  position: absolute; left: 12px; top: -60px; z-index: 50;
+  background: var(--star); color: var(--sky); padding: 10px 14px; border-radius: 8px;
+  font-family: var(--display); font-weight: 700; text-decoration: none;
+}
+.skip:focus { top: 12px; }
+
+/* ---------- Header ---------- */
+.site-header { position: sticky; top: 0; z-index: 20; background: rgba(13, 27, 58, .95); backdrop-filter: blur(8px); }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; }
+.brand { font-family: var(--display); font-weight: 800; font-size: 1.05rem; color: #fff; text-decoration: none; }
+.site-nav ul { display: flex; gap: 24px; list-style: none; margin: 0; padding: 0; }
+.site-nav a { font-family: var(--display); font-weight: 500; font-size: .95rem; color: #CFE0F5; text-decoration: none; }
+.site-nav a:hover { color: #fff; }
+.header-controls { display: flex; align-items: center; gap: 10px; }
+.lang { display: inline-flex; border: 1px solid var(--sky-line); border-radius: 999px; padding: 2px; }
+.lang button {
+  font: 700 .85rem var(--display); background: none; color: #CFE0F5; border: 0;
+  padding: 5px 13px; border-radius: 999px; cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--on-sky); color: var(--sky); }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--sky-line);
+  background: none; cursor: pointer; font-size: 1rem; line-height: 1; padding: 0;
+}
+.theme-toggle:hover { border-color: var(--on-sky); }
+.theme-icon-light { display: none; }
+html[data-theme="dark"] .theme-icon-dark { display: none; }
+html[data-theme="dark"] .theme-icon-light { display: inline; }
+@media (max-width: 760px) { .site-nav { display: none; } }
+
+/* ---------- Hero ---------- */
+.hero { background: var(--sky); color: var(--on-sky); padding: clamp(36px, 7vw, 80px) 0 clamp(44px, 7vw, 88px); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: center; }
+.status { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 500; font-size: .95rem; color: var(--on-sky-soft); margin: 0 0 22px; }
+.status::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #6FE3A5; }
+.hero h1 {
+  font-family: var(--display); font-weight: 800; margin: 0 0 18px;
+  font-size: clamp(3.1rem, 9vw, 6rem); line-height: .93; letter-spacing: -.025em;
+  font-variation-settings: "opsz" 96;
+}
+.hero .role { font-family: var(--display); font-weight: 700; font-size: clamp(1.15rem, 2.4vw, 1.5rem); margin: 0 0 12px; color: var(--star); }
+.hero .lead { max-width: 34ch; font-size: clamp(1.1rem, 2vw, 1.3rem); line-height: 1.5; margin: 0 0 30px; color: var(--on-sky); }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-block; font-family: var(--display); font-weight: 700; font-size: 1rem;
+  text-decoration: none; padding: 12px 20px; border-radius: 10px; border: 2px solid transparent;
+}
+.btn-star { background: var(--star); color: var(--sky); }
+.btn-star:hover { background: #fff; color: var(--sky); }
+.btn-ghost { border-color: var(--sky-line); color: var(--on-sky); }
+.btn-ghost:hover { border-color: var(--on-sky); color: #fff; }
+.btn-ink { background: var(--ink); color: var(--paper-2); }
+.btn-ink:hover { background: var(--violet); color: #fff; }
+.btn-line { border-color: var(--ink); color: var(--ink); }
+.btn-line:hover { border-color: var(--violet); color: var(--violet); }
+
+/* Sterrenbeeld: elke ster is een project */
+.const-wrap { margin: 0; }
+.const { width: 100%; height: auto; display: block; overflow: visible; }
+.const .bg circle { fill: #fff; opacity: .55; }
+.const .link { fill: none; stroke: #7FA3D6; stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; animation: draw 1.1s ease-out backwards; animation-delay: calc(var(--i) * .3s + .35s); }
+.const .link.maybe { stroke-dasharray: 5 7; animation: fade .8s ease-out 1.6s backwards; }
+.const .star { cursor: pointer; animation: fade .6s ease-out backwards; animation-delay: calc(var(--i) * .3s); }
+.const .star .halo { fill: rgba(255, 233, 168, .10); }
+.const .star .core { fill: var(--star); transition: fill .15s; }
+.const .star .ring { fill: none; stroke: var(--star); stroke-width: 1.6; stroke-dasharray: 3 5; }
+.const .star text { font-family: var(--display); font-weight: 700; font-size: 21px; fill: var(--on-sky); }
+.const .star:hover .core, .const .star:focus-visible .core { fill: #fff; }
+.const .star:hover text, .const .star:focus-visible text { text-decoration: underline; text-underline-offset: 4px; }
+.const .star:focus-visible { outline: none; }
+.const .star:focus-visible .halo { stroke: var(--star); stroke-width: 2; }
+.const-note { margin: 10px 0 0; font-family: var(--display); font-size: .9rem; color: var(--on-sky-soft); }
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .const .link, .const .link.maybe, .const .star { animation: none; }
+}
+@media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } .hero .lead { max-width: 44ch; } }
+
+/* ---------- Secties ---------- */
+section { scroll-margin-top: 72px; }
+.section { padding: clamp(48px, 7vw, 88px) 0; }
+h2 { font-family: var(--display); font-weight: 800; font-size: clamp(1.9rem, 4.2vw, 2.7rem); line-height: 1.05; letter-spacing: -.015em; margin: 0 0 14px; }
+.intro { max-width: 56ch; color: var(--ink-soft); margin: 0 0 12px; }
+.intro.note { font-size: .92rem; font-style: italic; }
+
+/* ---------- Projecten ---------- */
+.project { display: grid; gap: 28px 44px; padding: 44px 0; border-top: 1px solid var(--line); scroll-margin-top: 72px; }
+.project.feature { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+.project.side { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+.project.wip { border-top: 2px dashed var(--line); }
+.project.no-cover { grid-template-columns: minmax(0, 1fr); max-width: 62ch; }
+@media (max-width: 900px) {
+  .project.feature, .project.side { grid-template-columns: minmax(0, 1fr); }
+}
+
+.cover { aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden; background: var(--sky); }
+.cover.portrait { aspect-ratio: 3 / 4; }
+.cover svg, .cover img, .cover video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cover.portrait img { object-position: top; }
+.project.feature .cover { border-radius: 20px; }
+.clip { display: block; width: 100%; border-radius: 10px; margin-top: 18px; background: var(--sky); }
+.reel-link { margin: 18px 0 0; }
+.photo { margin: 16px 0 0; }
+.photo img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.photo figcaption { font-family: var(--display); font-size: .88rem; color: var(--ink-soft); margin-top: 8px; }
+
+h3 { font-family: var(--display); font-weight: 800; font-size: clamp(1.7rem, 3.6vw, 2.4rem); line-height: 1.05; letter-spacing: -.015em; margin: 0 0 10px; }
+h3 small { display: block; font-size: 1.05rem; font-weight: 500; letter-spacing: 0; color: var(--ink-soft); margin-top: 6px; }
+.badge { display: inline-block; font-family: var(--display); font-weight: 700; font-size: .85rem; padding: 3px 10px; border-radius: 6px; background: var(--violet); color: #fff; margin-bottom: 12px; }
+.badge.soft { background: transparent; color: var(--violet); border: 1.5px solid var(--violet); }
+.pitch { margin: 0 0 18px; max-width: 60ch; }
+.facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 20px; margin: 0 0 20px; font-size: .96rem; }
+.facts dt { font-family: var(--display); font-weight: 700; color: var(--ink-soft); }
+.facts dd { margin: 0; }
+.did { margin: 0 0 22px; padding-left: 1.15em; max-width: 62ch; }
+.did li { margin-bottom: 10px; padding-left: 2px; }
+.did li::marker { color: var(--teal); }
+.did strong { font-family: var(--display); font-weight: 700; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
+
+.reviews { margin: 0 0 22px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 12px; max-width: 62ch; background: var(--paper-2); }
+.review-viewport { overflow: hidden; }
+.review-track { display: flex; transition: transform .5s cubic-bezier(.4,0,.2,1); }
+.review-quote { flex: 0 0 100%; margin: 0; min-width: 0; }
+.review-quote p { margin: 0 0 8px; font-style: italic; }
+.review-quote cite { font-style: normal; font-family: var(--display); font-size: .85rem; color: var(--ink-soft); }
+.review-controls { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+.review-controls button { border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 999px; width: 30px; height: 30px; cursor: pointer; font-size: 1.05rem; line-height: 1; }
+.review-controls button:hover { border-color: var(--teal); color: var(--teal); }
+.review-dots { display: flex; gap: 6px; }
+.review-dots button { width: 8px; height: 8px; padding: 0; border: none; border-radius: 50%; background: var(--line); cursor: pointer; }
+.review-dots button.is-active { background: var(--star); }
+
+details { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 12px; max-width: 62ch; }
+summary { cursor: pointer; font: 700 1rem var(--display); color: var(--teal); list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: "+"; display: inline-block; width: 1.3em; }
+details[open] summary::before { content: "\2013"; }
+details p { margin: 12px 0 0; }
+
+/* ---------- Waarmee ik kan helpen ---------- */
+.help { background: var(--paper-2); }
+.help-list { margin: 34px 0 0; }
+.help-row { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 8px 44px; padding: 22px 0; border-top: 1px solid var(--line); }
+.help-row dt { font-family: var(--display); font-weight: 700; font-size: 1.25rem; line-height: 1.2; }
+.help-row dd { margin: 0; max-width: 60ch; }
+@media (max-width: 760px) { .help-row { grid-template-columns: 1fr; } }
+.tools { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 24px; margin: 30px 0 0; padding-top: 24px; border-top: 2px solid var(--ink); font-size: .98rem; }
+.tools dt { font-family: var(--display); font-weight: 700; color: var(--ink-soft); }
+.tools dd { margin: 0; }
+
+/* ---------- Over mij ---------- */
+.about-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 44px; align-items: start; }
+.about-photo { margin: 0; }
+.about-photo img { display: block; width: 100%; height: auto; border-radius: 20px 20px 20px 4px; }
+.about-text p { max-width: 58ch; margin: 0 0 16px; }
+@media (max-width: 760px) { .about-grid { grid-template-columns: 1fr; } .about-photo { max-width: 280px; } }
+
+/* ---------- Contact ---------- */
+.contact { background: var(--sky); color: var(--on-sky); }
+.contact h2 { color: var(--on-sky); }
+.contact p { max-width: 52ch; color: var(--on-sky); }
+.contact a:not(.btn) { color: var(--star); }
+.contact a:not(.btn):hover { color: #fff; }
+.mail { display: inline-block; font-family: var(--display); font-weight: 800; font-size: clamp(1.3rem, 4.4vw, 2.4rem); letter-spacing: -.01em; word-break: break-word; margin: 8px 0 30px; }
+.contact-links { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 48px; }
+.contact .btn-line { border-color: var(--sky-line); color: var(--on-sky); }
+.contact .btn-line:hover { border-color: var(--star); color: var(--star); }
+.sign { border-left: 3px solid var(--star); padding-left: 18px; margin: 0; max-width: 46ch; font-style: italic; color: var(--on-sky-soft); }
+.site-footer { background: var(--sky); color: var(--on-sky-soft); padding: 0 0 36px; font-family: var(--display); font-size: .9rem; }
+.site-footer .wrap { border-top: 1px solid var(--sky-line); padding-top: 22px; }
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main"><span data-l="nl">Naar de inhoud</span><span data-l="en">Skip to content</span></a>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="#top">Jantina Mulder</a>
+    <nav class="site-nav" aria-label="Menu">
+      <ul>
+        <li><a href="#projecten"><span data-l="nl">Projecten</span><span data-l="en">Projects</span></a></li>
+        <li><a href="#help"><span data-l="nl">Wat ik doe</span><span data-l="en">What I do</span></a></li>
+        <li><a href="#over"><span data-l="nl">Over mij</span><span data-l="en">About</span></a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">
+        <span class="theme-icon theme-icon-dark" aria-hidden="true">🌙</span>
+        <span class="theme-icon theme-icon-light" aria-hidden="true">☀️</span>
+        <span class="sr-only" data-l="nl">Donkere modus</span>
+        <span class="sr-only" data-l="en">Dark mode</span>
+      </button>
+      <div class="lang" role="group" aria-label="Taal / Language">
+        <button type="button" data-set="nl" aria-pressed="true" lang="nl">NL</button>
+        <button type="button" data-set="en" aria-pressed="false" lang="en">EN</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ================= HERO ================= -->
+<section class="hero on-sky" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="status">
+        <span data-l="nl">Op zoek naar een project van februari t/m juli</span>
+        <span data-l="en">Looking for a project for February&ndash;July</span>
+      </p>
+      <h1>Jantina<br>Mulder</h1>
+      <p class="role">
+        <span data-l="nl">All-round programmer &amp; game designer</span>
+        <span data-l="en">All-round programmer &amp; game designer</span>
+      </p>
+      <p class="lead">
+        <span data-l="nl">Ik werk moeiteloos tussen engines: Unity/C# en GameMaker/GML. Ik programmeer speelbare games en bouw de tools waarmee ontwerpers zelf verder kunnen, zonder mij er steeds bij te hoeven roepen.</span>
+        <span data-l="en">I move easily between engines: Unity/C# and GameMaker/GML. I program playable games and build the tools that let designers keep going on their own, without having to page me every time.</span>
+      </p>
+      <div class="actions">
+        <a class="btn btn-star" href="#projecten"><span data-l="nl">Bekijk mijn projecten</span><span data-l="en">See my projects</span></a>
+        <a class="btn btn-ghost" href="mailto:jantina2012mulder@gmail.com"><span data-l="nl">Stuur een mail</span><span data-l="en">Send an email</span></a>
+      </div>
+    </div>
+
+    <figure class="const-wrap">
+      <svg class="const" viewBox="0 0 560 420" role="group" aria-label="Sterrenbeeld met vijf sterren, één per project">
+        <defs>
+          <path id="spark" d="M0-1Q.13-.13 1 0Q.13.13 0 1Q-.13.13-1 0Q-.13-.13 0-1Z"/>
+        </defs>
+        <g class="bg" aria-hidden="true"><circle cx="184" cy="69" r="1.1"/><circle cx="362" cy="37" r="1.8"/><circle cx="300" cy="156" r="1.1"/><circle cx="40" cy="213" r="1.8"/><circle cx="46" cy="45" r="0.9"/><circle cx="239" cy="342" r="1.8"/><circle cx="75" cy="98" r="1.8"/><circle cx="349" cy="391" r="1.8"/><circle cx="539" cy="27" r="1.4"/><circle cx="475" cy="125" r="1.1"/><circle cx="176" cy="338" r="1.1"/><circle cx="106" cy="243" r="1.4"/><circle cx="356" cy="158" r="1.1"/><circle cx="306" cy="33" r="1.1"/><circle cx="255" cy="129" r="1.8"/><circle cx="440" cy="290" r="1.4"/><circle cx="294" cy="362" r="0.9"/><circle cx="29" cy="278" r="1.1"/><circle cx="424" cy="240" r="0.9"/><circle cx="465" cy="390" r="0.9"/><circle cx="266" cy="276" r="1.4"/><circle cx="99" cy="55" r="1.8"/><circle cx="159" cy="176" r="1.1"/><circle cx="328" cy="114" r="0.9"/><circle cx="10" cy="177" r="0.9"/><circle cx="526" cy="287" r="1.8"/><circle cx="497" cy="323" r="1.4"/><circle cx="63" cy="155" r="1.1"/><circle cx="22" cy="361" r="1.4"/><circle cx="261" cy="203" r="0.9"/><circle cx="194" cy="115" r="1.8"/><circle cx="459" cy="73" r="1.1"/><circle cx="201" cy="20" r="1.1"/><circle cx="23" cy="121" r="1.4"/><circle cx="149" cy="288" r="1.8"/><circle cx="518" cy="407" r="0.9"/><circle cx="528" cy="155" r="1.4"/><circle cx="128" cy="100" r="1.4"/><circle cx="226" cy="391" r="1.4"/><circle cx="247" cy="82" r="1.4"/><circle cx="341" cy="212" r="1.1"/><circle cx="388" cy="362" r="0.9"/><circle cx="127" cy="393" r="1.4"/><circle cx="546" cy="344" r="1.1"/><circle cx="43" cy="406" r="1.4"/><circle cx="144" cy="14" r="1.1"/></g>
+
+        <path class="link" style="--i:0" pathLength="1" d="M90 335 L205 225"/>
+        <path class="link" style="--i:1" pathLength="1" d="M205 225 L335 300"/>
+        <path class="link" style="--i:2" pathLength="1" d="M335 300 L410 125"/>
+        <path class="link maybe" d="M410 125 L500 215"/>
+
+        <a class="star" style="--i:0" href="#killer">
+          <circle class="halo" cx="90" cy="335" r="21"/>
+          <use class="core" href="#spark" transform="translate(90 335) scale(11)"/>
+          <text x="32" y="376"><tspan>Killer Promotion</tspan></text>
+        </a>
+        <a class="star" style="--i:1" href="#cosmic">
+          <circle class="halo" cx="205" cy="225" r="21"/>
+          <use class="core" href="#spark" transform="translate(205 225) scale(11)"/>
+          <text x="205" y="192" text-anchor="middle">Cosmic Haven</text>
+        </a>
+        <a class="star" style="--i:2" href="#rivercall">
+          <circle class="halo" cx="335" cy="300" r="23"/>
+          <use class="core" href="#spark" transform="translate(335 300) scale(12)"/>
+          <text x="335" y="344" text-anchor="middle">The Rivercall Monolith</text>
+        </a>
+        <a class="star" style="--i:3" href="#adrift">
+          <circle class="halo" cx="410" cy="125" r="30"/>
+          <use class="core" href="#spark" transform="translate(410 125) scale(17)"/>
+          <text x="410" y="80" text-anchor="middle">Adrift</text>
+        </a>
+        <a class="star" style="--i:4" href="#nu">
+          <circle class="ring" cx="500" cy="215" r="14"/>
+          <circle class="halo" cx="500" cy="215" r="22"/>
+          <circle class="core" cx="500" cy="215" r="4"/>
+          <text x="548" y="262" text-anchor="end"><tspan data-l="nl">Nu in de maak</tspan><tspan data-l="en">Currently building</tspan></text>
+        </a>
+      </svg>
+      <figcaption class="const-note">
+        <span data-l="nl">Elke ster is een project. Klik om erheen te springen.</span>
+        <span data-l="en">Every star is a project. Click one to jump to it.</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= PROJECTEN ================= -->
+<section class="section" id="projecten" aria-labelledby="h-projecten">
+  <div class="wrap">
+    <h2 id="h-projecten"><span data-l="nl">Projecten</span><span data-l="en">Projects</span></h2>
+    <p class="intro">
+      <span data-l="nl">Vier afgeronde projecten en eentje in de maak: van een prototype in acht weken tot een game die met een team van ongeveer veertig studenten is gemaakt.</span>
+      <span data-l="en">Four finished projects and one in the making: from an eight-week prototype to a game built by a team of about forty students.</span>
+    </p>
+    <p class="intro note">
+      <span data-l="nl">Dit is een selectie: ik heb aan meer projecten gewerkt, maar dit zijn de kernprojecten die het beste laten zien wat ik kan. Vraag gerust naar de rest.</span>
+      <span data-l="en">This is a selection: I've worked on more projects, but these are the core ones that best show what I can do. Feel free to ask about the rest.</span>
+    </p>
+
+    <!-- ---------- ADRIFT ---------- -->
+    <article class="project feature" id="adrift">
+      <div>
+        <div class="cover portrait">
+          <img src="media/adrift-cover.jpg" alt="Officiële cover van Adrift: een zeilboot op woeste golven onder een sterrenbeeld" loading="lazy">
+        </div>
+        <p class="reel-link">
+          <a class="btn btn-line" href="https://www.instagram.com/reel/DZUaq_BJNkD/" target="_blank" rel="noopener"><span data-l="nl">Bekijk de trailer op Instagram</span><span data-l="en">Watch the trailer on Instagram</span></a>
+        </p>
+        <p class="reel-link">
+          <a class="btn btn-line" href="https://youtu.be/rWgpmhQFV00" target="_blank" rel="noopener"><span data-l="nl">Bekijk: dialoogsysteem, aanmeren &amp; bootbesturing</span><span data-l="en">Watch: dialogue system, docking &amp; boat controls</span></a>
+        </p>
+        <video class="clip" autoplay loop muted playsinline aria-label="Ishtar dialoogscène in Adrift, met tekst die op het scherm verschijnt">
+          <source src="media/adrift-dialogue.webm" type="video/webm">
+          <source src="media/adrift-dialogue.mp4" type="video/mp4">
+        </video>
+        <video class="clip" autoplay loop muted playsinline aria-label="Boegbeeld van de boot in Adrift, varend onder een sterrenhemel gebruikt voor navigatie">
+          <source src="media/adrift-navigation.webm" type="video/webm">
+          <source src="media/adrift-navigation.mp4" type="video/mp4">
+        </video>
+        <figure class="photo">
+          <img src="media/team.jpg" width="1400" height="933" alt="Een deel van team ShiftGrade op het Student Festival, voor de posters van de game" loading="lazy">
+          <figcaption>
+            <span data-l="nl">Een deel van team ShiftGrade op het Student Festival.</span>
+            <span data-l="en">Part of team ShiftGrade at the Student Festival.</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div>
+        <span class="badge"><span data-l="nl">Uitgelicht</span><span data-l="en">Featured</span></span>
+        <h3>Adrift</h3>
+        <p class="pitch">
+          <span data-l="nl">Een zeilgame waarin je navigeert op de sterren. We waren met ongeveer veertig studenten en bouwden de game van idee tot release, met aparte teams en afdelingen zoals in een echte studio.</span>
+          <span data-l="en">A sailing game where you navigate by the stars. About forty students built it from idea to release, with separate teams and departments like in a real studio.</span>
+        </p>
+
+        <dl class="facts">
+          <dt><span data-l="nl">Rol</span><span data-l="en">Role</span></dt>
+          <dd><span data-l="nl">Lead programmer, Scrum Master en Version Control &amp; Development Lead</span><span data-l="en">Lead programmer, Scrum Master and Version Control &amp; Development Lead</span></dd>
+          <dt>Team</dt>
+          <dd><span data-l="nl">Ongeveer 40 studenten in 7 teams</span><span data-l="en">About 40 students in 7 teams</span></dd>
+          <dt><span data-l="nl">Duur</span><span data-l="en">Time</span></dt>
+          <dd><span data-l="nl">Een semester, meer dan 6 sprints</span><span data-l="en">One semester, 6+ sprints</span></dd>
+          <dt>Tech</dt>
+          <dd>Unity, C#, GitHub</dd>
+        </dl>
+
+        <ul class="did">
+          <li data-l="nl"><strong>Dialoogsysteem voor designers.</strong> Een modulair systeem met ScriptableObjects en een eigen Unity-editor, waarmee designers dialogen maken zonder code. Later uitgebreid met kleuren, teksttrillingen en automatische voortgang die de beweging niet onderbreekt.</li>
+          <li data-l="en"><strong>Dialogue system for designers.</strong> A modular system built on ScriptableObjects and a custom Unity editor, so designers can create dialogue without writing code. Later extended with colours, text shake and automatic progression that doesn't interrupt movement.</li>
+
+          <li data-l="nl"><strong>Bootbesturing.</strong> Ik vereenvoudigde de physics-gebaseerde besturing tot een arcade-achtige variant, met een schakelaar naar de moeilijke modus, tutorials voor beide modi en een aanmeersysteem.</li>
+          <li data-l="en"><strong>Boat controls.</strong> I simplified the physics-based controls into an arcade-style version, with a toggle back to the hard mode, tutorials for both modes and a docking system.</li>
+
+          <li data-l="nl"><strong>Een tijdelijke state machine die bleef.</strong> Mijn snelle oplossing om beweging te stoppen tijdens dialoog groeide, met collega's die het uitbreidden, uit tot de Input Map Manager van het hele spel.</li>
+          <li data-l="en"><strong>A temporary state machine that stayed.</strong> My quick fix for stopping movement during dialogue grew, with colleagues extending it, into the Input Map Manager for the whole game.</li>
+
+          <li data-l="nl"><strong>Debug-menu.</strong> Teleporteren naar elk eiland, tutorials resetten en sneller spelen. Veel gebruikt bij tests en sprint reviews, en door andere programmeurs uitgebreid.</li>
+          <li data-l="en"><strong>Debug menu.</strong> Teleport to any island, reset tutorials and speed up play. Used heavily in testing and sprint reviews, and extended by other programmers.</li>
+
+          <li data-l="nl"><strong>Versiebeheer voor 7 teams.</strong> Pull requests, merge-dagen, een code- en bestandsstandaard, en hulp bij merge-conflicten in één gedeeld Unity-project.</li>
+          <li data-l="en"><strong>Version control for 7 teams.</strong> Pull requests, merge days, a code and file-structure standard, and help with merge conflicts in one shared Unity project.</li>
+        </ul>
+
+        <div class="reviews" role="region" aria-label="Reviews van Adrift op itch.io / Adrift reviews on itch.io">
+          <div class="review-viewport">
+            <div class="review-track">
+              <blockquote class="review-quote">
+                <p>&ldquo;the atmosphere was great and i liked the sea navigation.&rdquo;</p>
+                <cite>&mdash; Sandwich Maker, itch.io</cite>
+              </blockquote>
+              <blockquote class="review-quote">
+                <p>&ldquo;Really love the atmosphere of the game! The puzzles are tricky as well, had great time solving them. The highlight of course is the navigation by the stars, hope to see more games like that.&rdquo;</p>
+                <cite>&mdash; palkaodiseya, itch.io</cite>
+              </blockquote>
+              <blockquote class="review-quote">
+                <p>&ldquo;Just played it without cheats, I love the game! I hope you guys keep making games, cant wait for the next one!&rdquo;</p>
+                <cite>&mdash; bossyofox, itch.io</cite>
+              </blockquote>
+            </div>
+          </div>
+          <div class="review-controls">
+            <button type="button" class="review-prev" aria-label="Vorige review / Previous review">&lsaquo;</button>
+            <div class="review-dots">
+              <button type="button" class="is-active" aria-label="Review 1"></button>
+              <button type="button" aria-label="Review 2"></button>
+              <button type="button" aria-label="Review 3"></button>
+            </div>
+            <button type="button" class="review-next" aria-label="Volgende review / Next review">&rsaquo;</button>
+          </div>
+        </div>
+
+        <p class="pitch">
+          <span data-l="nl">Adrift werd gespeeld op het Student Festival, waar de stoelen bijna nooit leeg waren, staat op itch.io, en heeft daar tot nu toe alleen maar positieve reviews &mdash; die ik met enige trots af en toe herlees.</span>
+          <span data-l="en">Adrift was played at the Student Festival, where the chairs were almost never empty, is on itch.io, and has nothing but positive reviews there so far &mdash; which I reread every once in a while, with some pride.</span>
+        </p>
+
+        <p class="links">
+          <a class="btn btn-ink" href="https://shiftgrade.itch.io/adrift" target="_blank" rel="noopener"><span data-l="nl">Speel Adrift op itch.io</span><span data-l="en">Play Adrift on itch.io</span></a>
+        </p>
+      </div>
+    </article>
+
+    <!-- ---------- THE RIVERCALL MONOLITH ---------- -->
+    <article class="project side" id="rivercall">
+      <div>
+        <div class="cover">
+          <img src="media/rivercall-cover.jpg" alt="Officiële cover van The Rivercall Monolith: een torenvormig heiligdom op een klif" loading="lazy">
+        </div>
+        <p class="reel-link">
+          <a class="btn btn-line" href="https://youtu.be/R02px0GQWHc" target="_blank" rel="noopener"><span data-l="nl">Bekijk de gameplay reel</span><span data-l="en">Watch the gameplay reel</span></a>
+        </p>
+      </div>
+      <div>
+        <h3>The Rivercall Monolith</h3>
+        <p class="pitch">
+          <span data-l="nl">Een roguelite waarin je door kamers vecht en modifiers verzamelt die je speelstijl veranderen. Ik bouwde het modifier-systeem, een eigen Unity-editor om ze te maken, en experimenteerde met lokale co-op.</span>
+          <span data-l="en">A roguelite where you fight through rooms and collect modifiers that change how you play. I built the modifier system, a custom Unity editor to create them, and experimented with local co-op.</span>
+        </p>
+        <dl class="facts">
+          <dt><span data-l="nl">Rol</span><span data-l="en">Role</span></dt>
+          <dd>Senior programmer</dd>
+          <dt>Tech</dt>
+          <dd>Unity, C#</dd>
+        </dl>
+        <ul class="did">
+          <li data-l="nl"><strong>Modifier-systeem.</strong> Een systeem waarmee nieuwe upgrades, zoals "+speed" of een tijdelijke bonus na een dood, makkelijk toegevoegd kunnen worden zonder de rest van de game aan te raken.</li>
+          <li data-l="en"><strong>Modifier system.</strong> A system that lets new upgrades, like "+speed" or a temporary bonus after a death, be added easily without touching the rest of the game.</li>
+          <li data-l="nl"><strong>Eigen Unity-editor.</strong> Net als bij Adrift bouwde ik een eigen scherm in Unity, dit keer zodat het team zelf nieuwe upgrades kon maken en koppelen zonder in de code te duiken.</li>
+          <li data-l="en"><strong>Custom Unity editor.</strong> As with Adrift, I built a custom screen in Unity, this time so the team could create and link new upgrades themselves without digging into the code.</li>
+          <li data-l="nl"><strong>Lokale split-screen co-op.</strong> Ik experimenteerde met twee spelers op hetzelfde scherm, elk met een eigen cameradeel dat automatisch meebeweegt. Dit heeft het uiteindelijke prototype niet gehaald &mdash; aan online multiplayer heb ik nooit gewerkt.</li>
+          <li data-l="en"><strong>Local split-screen co-op.</strong> I experimented with two players sharing one screen, each with their own camera view that adjusts automatically. It didn't make it into the final prototype &mdash; I never worked on online multiplayer.</li>
+        </ul>
+        <p class="links">
+          <a class="btn btn-ink" href="https://jvalstar.itch.io/the-rivercall-monolith" target="_blank" rel="noopener"><span data-l="nl">Speel op itch.io</span><span data-l="en">Play on itch.io</span></a>
+        </p>
+      </div>
+    </article>
+
+    <!-- ---------- KILLER PROMOTION ---------- -->
+    <article class="project side" id="killer">
+      <div>
+        <div class="cover">
+          <img src="media/killer-promotion-cover.jpg" alt="Titelscherm van Killer Promotion" loading="lazy">
+        </div>
+        <p class="reel-link">
+          <a class="btn btn-line" href="https://youtu.be/xSuKkEVD-7k" target="_blank" rel="noopener"><span data-l="nl">Bekijk de gameplay</span><span data-l="en">Watch the gameplay</span></a>
+        </p>
+      </div>
+      <div>
+        <h3>Killer Promotion<small><span data-l="nl">Lead programmer, Vision Keeper</span><span data-l="en">Lead programmer, Vision Keeper</span></small></h3>
+        <p class="pitch">
+          <span data-l="nl">Dialoog en parkour in een spel over een boosaardig bedrijf dat door mythische wezens wordt gerund. Mijn eerste digitale project als CMGT-student, en ik was de enige programmeur in de groep.</span>
+          <span data-l="en">Dialogue and parkour in a game about an evil company run by mythical creatures. My first digital project as a CMGT student, and I was the only programmer in the group.</span>
+        </p>
+        <dl class="facts">
+          <dt><span data-l="nl">Duur</span><span data-l="en">Time</span></dt>
+          <dd><span data-l="nl">8 weken</span><span data-l="en">8 weeks</span></dd>
+          <dt>Tech</dt>
+          <dd>GameMaker Studio 2, GML</dd>
+        </dl>
+        <ul class="did">
+          <li data-l="nl"><strong>Dialoog als woordpuzzel.</strong> In plaats van vaste zinnen kiest de speler losse woorden om zelf een zin te bouwen. Onder water if-statements, switch-cases en enums, die ook de niet-coders in het team konden volgen. Enums koppelen het juiste portret aan elk personage en gesprek.</li>
+          <li data-l="en"><strong>Dialogue as a word puzzle.</strong> Instead of fixed lines, the player picks individual words to build their own sentence. Underneath: if-statements, switch cases and enums, kept readable for the non-coders on the team. Enums tie the right portrait to each character and conversation.</li>
+          <li data-l="nl"><strong>Parkour met bewegingsstaten.</strong> Lopen, in dialoog en sterven. Bij een botsing explodeert de schoonmaker, en een neergezette spons of emmer verhoogt de sprong.</li>
+          <li data-l="en"><strong>Parkour with movement states.</strong> Moving, in dialogue and dying. On a collision the janitor explodes, and a placed sponge or bucket raises the jump height.</li>
+          <li data-l="nl"><strong>Ik deed ook de pixel art.</strong> De janitor-sprite in het spel heb ik zelf getekend, naast programmeren.</li>
+          <li data-l="en"><strong>I also did the pixel art.</strong> I drew the janitor sprite in the game myself, alongside programming.</li>
+        </ul>
+        <p class="links">
+          <a class="btn btn-ink" href="https://drive.google.com/drive/folders/1DFuom2oP9edyQv4jORJziiHex-Bh27Uz" target="_blank" rel="noopener"><span data-l="nl">Download de game (EXE)</span><span data-l="en">Download the game (EXE)</span></a>
+        </p>
+      </div>
+    </article>
+
+    <!-- ---------- COSMIC HAVEN ---------- -->
+    <article class="project side" id="cosmic">
+      <div>
+        <div class="cover">
+          <img src="media/cosmic-haven-cover.jpg" alt="Titelscherm van Cosmic Haven: Check-In Crisis" loading="lazy">
+        </div>
+        <p class="reel-link">
+          <a class="btn btn-line" href="https://youtu.be/ggx01yDG0Lo" target="_blank" rel="noopener"><span data-l="nl">Bekijk de gameplay</span><span data-l="en">Watch the gameplay</span></a>
+        </p>
+      </div>
+      <div>
+        <span class="badge soft"><span data-l="nl">Prototype</span><span data-l="en">Prototype</span></span>
+        <h3>Cosmic Haven: Check-In Crisis<small>Lead programmer</small></h3>
+        <p class="pitch">
+          <span data-l="nl">Mijn eerste VR-project en mijn eerste project in jaar 2. Dit is een intern prototype, niet publiek uitgebracht: rafelig aan de randen, maar een enorme leerervaring. Hieronder de VR-onderdelen die ik bouwde.</span>
+          <span data-l="en">My first VR project and my first project in year 2. This is an internal prototype, not publicly released: rough around the edges, but a huge learning experience. Below are the VR parts I built.</span>
+        </p>
+        <dl class="facts">
+          <dt><span data-l="nl">Duur</span><span data-l="en">Time</span></dt>
+          <dd><span data-l="nl">8 weken</span><span data-l="en">8 weeks</span></dd>
+          <dt>Tech</dt>
+          <dd>Unity, C#, VR</dd>
+        </dl>
+        <ul class="did">
+          <li data-l="nl"><strong>Menu-UI met fades.</strong> De scène fadet in en uit, zodat je in VR niet gedesoriënteerd raakt.</li>
+          <li data-l="en"><strong>Menu UI with fades.</strong> The scene fades in and out so you don't get disoriented in VR.</li>
+          <li data-l="nl"><strong>Pauze- en game-overmenu.</strong> Verschijnt op afstand voor de camera, schakelt de beweging uit en pauzeert de rest van het spel.</li>
+          <li data-l="en"><strong>Pause and game-over menu.</strong> Appears at a distance in front of the camera, disables locomotion and pauses the rest of the game.</li>
+          <li data-l="nl"><strong>ScoreManager.</strong> Houdt bugs en kills bij. Vijanden roepen de kill-functie aan, en als alle kills gehaald zijn speelt er een voice-line af.</li>
+          <li data-l="en"><strong>ScoreManager.</strong> Tracks bugs and kills. Enemies call the kill function, and once all kills are reached a voice line plays.</li>
+          <li data-l="nl"><strong>Gezondheidshorloge.</strong> De afbeelding op het horloge verandert mee met het gezondheidspercentage van de speler.</li>
+          <li data-l="en"><strong>Health watch.</strong> The image on the watch changes with the player's health percentage.</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- ---------- NU IN DE MAAK ---------- -->
+    <article class="project wip no-cover" id="nu">
+      <div>
+        <span class="badge soft"><span data-l="nl">Werk in uitvoering</span><span data-l="en">Work in progress</span></span>
+        <h3>
+          <span data-l="nl">Fysieke actie-reactiegame voor visueel beperkte kinderen</span>
+          <span data-l="en">Physical action-reaction game for visually impaired children</span>
+        </h3>
+        <p class="pitch">
+          <span data-l="nl">Een fysieke game waarin actie en reactie centraal staan, ontwikkeld in samenwerking met visueel beperkte kinderen. Het project loopt nog. Zodra er iets te laten zien is, komt het hier.</span>
+          <span data-l="en">A physical game built around action and reaction, developed in collaboration with visually impaired children. The project is still running. Once there is something to show, it will appear here.</span>
+        </p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= WAARMEE IK KAN HELPEN ================= -->
+<section class="section help" id="help" aria-labelledby="h-help">
+  <div class="wrap">
+    <h2 id="h-help"><span data-l="nl">Waarmee ik kan helpen</span><span data-l="en">How I can help</span></h2>
+    <p class="intro">
+      <span data-l="nl">Dit zijn de dingen die ik in mijn projecten al heb gebouwd en getest &mdash; dus ook voor jou kan doen.</span>
+      <span data-l="en">These are things I've already built and tested in my own projects &mdash; so I can do them for you too.</span>
+    </p>
+
+    <dl class="help-list">
+      <div class="help-row">
+        <dt><span data-l="nl">Gameplay programmeren</span><span data-l="en">Gameplay programming</span></dt>
+        <dd>
+          <span data-l="nl">Besturing, mechanics, state machines en modifier-systemen, zoals de bootbesturing in Adrift (Unity) en het woordgestuurde dialoogsysteem in Killer Promotion (GameMaker).</span>
+          <span data-l="en">Controls, mechanics, state machines and modifier systems, like the boat controls in Adrift (Unity) and the word-driven dialogue system in Killer Promotion (GameMaker).</span>
+        </dd>
+      </div>
+      <div class="help-row">
+        <dt><span data-l="nl">Tools voor designers</span><span data-l="en">Tools for designers</span></dt>
+        <dd>
+          <span data-l="nl">Eigen Unity-editors en ScriptableObjects, zodat designers zelf dialogen of modifiers maken zonder een programmeur nodig te hebben. Mijn dialoogsysteem werkte na kopiëren direct in een ander project.</span>
+          <span data-l="en">Custom Unity editors and ScriptableObjects, so designers can make dialogue or modifiers themselves without needing a programmer. My dialogue system worked straight away after copying it into another project.</span>
+        </dd>
+      </div>
+      <div class="help-row">
+        <dt><span data-l="nl">Prototypes en VR</span><span data-l="en">Prototypes and VR</span></dt>
+        <dd>
+          <span data-l="nl">Van idee naar speelbaar prototype, zoals mijn projecten van acht weken. In VR let ik op comfort, zoals fades die desoriëntatie tegengaan.</span>
+          <span data-l="en">From idea to playable prototype, like my eight-week projects. In VR I pay attention to comfort, such as fades that prevent disorientation.</span>
+        </dd>
+      </div>
+      <div class="help-row">
+        <dt><span data-l="nl">Teamwerk en versiebeheer</span><span data-l="en">Teamwork and version control</span></dt>
+        <dd>
+          <span data-l="nl">GitHub, pull requests, merges, codestandaarden en Scrum. Bij Adrift hield ik een gedeeld Unity-project met 7 teams werkend.</span>
+          <span data-l="en">GitHub, pull requests, merges, code standards and Scrum. On Adrift I kept a shared Unity project running for 7 teams.</span>
+        </dd>
+      </div>
+    </dl>
+
+    <dl class="tools">
+      <dt><span data-l="nl">Engines</span><span data-l="en">Engines</span></dt>
+      <dd>Unity, GameMaker</dd>
+      <dt><span data-l="nl">Talen</span><span data-l="en">Languages</span></dt>
+      <dd>C#, GML</dd>
+      <dt><span data-l="nl">Werkwijze</span><span data-l="en">Workflow</span></dt>
+      <dd>GitHub, pull requests, Scrum</dd>
+      <dt><span data-l="nl">Specialiteiten</span><span data-l="en">Specialities</span></dt>
+      <dd><span data-l="nl">Eigen editors, dialoogsystemen, modulaire systemen, VR-menu's</span><span data-l="en">Custom editors, dialogue systems, modular systems, VR menus</span></dd>
+    </dl>
+  </div>
+</section>
+
+<!-- ================= OVER MIJ ================= -->
+<section class="section" id="over" aria-labelledby="h-over">
+  <div class="wrap about-grid">
+    <figure class="about-photo">
+      <img src="media/profile.jpg" width="432" height="576" alt="Jantina Mulder met een koptelefoon op en gekleurd haar in groen, blauw en paars" loading="lazy">
+    </figure>
+    <div class="about-text">
+      <h2 id="h-over"><span data-l="nl">Over mij</span><span data-l="en">About me</span></h2>
+      <p data-l="nl">Hoi, ik ben Jantina. Ik woon in Drachten en studeer Creative Media &amp; Game Technologies aan de Hanze Hogeschool &mdash; oftewel: officieel toestemming om de hele dag games te maken en dat huiswerk te noemen.</p>
+      <p data-l="en">Hi, I'm Jantina. I live in Drachten and study Creative Media &amp; Game Technologies at Hanze University of Applied Sciences &mdash; basically official permission to make games all day and call it homework.</p>
+      <p data-l="nl">Ik ben mijn hele leven al gamer. Stardew Valley en Minecraft zijn favorieten (vraag me niet hoeveel uur), en ik ben geïnteresseerd in het ontwikkelen van escape rooms &mdash; ik vind het geweldig om een goede puzzel in elkaar te zetten.</p>
+      <p data-l="en">I've been a gamer all my life. Stardew Valley and Minecraft are favourites (don't ask how many hours), and I'm interested in developing escape rooms &mdash; I love figuring out how to put a good puzzle together.</p>
+      <p data-l="nl">Naast programmeren pak ik in elk project ook zijmissies op, van art tot Scrum. Daardoor snap ik wat een team nodig heeft, ook als dat geen code is.</p>
+      <p data-l="en">Besides programming, I pick up side quests in every project, from art to Scrum. That helps me understand what a team needs, even when it isn't code.</p>
+      <p data-l="nl">Klein extraatje: ik verzamel ook vinyl, met platen van onder meer Dotan, Niall Horan, Duncan Laurence en Taylor Swift op de plank.</p>
+      <p data-l="en">Small fun fact: I also collect vinyl records, with Dotan, Niall Horan, Duncan Laurence and Taylor Swift among the ones on my shelf.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="section contact on-sky" id="contact" aria-labelledby="h-contact">
+  <div class="wrap">
+    <h2 id="h-contact"><span data-l="nl">Werken we samen?</span><span data-l="en">Shall we work together?</span></h2>
+    <p>
+      <span data-l="nl">Zoek je hulp bij een game, prototype of tool? Stuur me een mail met een korte beschrijving van wat je nodig hebt &mdash; ik lees 'm sneller dan je verwacht.</span>
+      <span data-l="en">Looking for help with a game, prototype or tool? Send me an email with a short description of what you need &mdash; I read it faster than you'd expect.</span>
+    </p>
+    <a class="mail" href="mailto:jantina2012mulder@gmail.com">jantina2012mulder@gmail.com</a>
+    <div class="contact-links">
+      <a class="btn btn-star" href="media/jantina-mulder-cv.pdf" target="_blank" rel="noopener"><span data-l="nl">Download mijn cv (PDF)</span><span data-l="en">Download my CV (PDF)</span></a>
+      <a class="btn btn-line" href="https://shiftgrade.itch.io/adrift" target="_blank" rel="noopener">Adrift (itch.io)</a>
+      <a class="btn btn-line" href="https://jvalstar.itch.io/the-rivercall-monolith" target="_blank" rel="noopener">The Rivercall Monolith (itch.io)</a>
+    </div>
+    <blockquote class="sign">
+      <span data-l="nl">Geen speciale krachten. Alleen een save-knop, een kompas van sterren, en de weigering om te quitten voor de eindbaas.</span>
+      <span data-l="en">No special powers. Just a save button, a compass made of stars, and a refusal to quit before the final boss.</span>
+    </blockquote>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">© 2026 Jantina Mulder</div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var descs = {
+    nl: "Portfolio van Jantina Mulder, game developer en all-round game designer. Unity, GameMaker, eigen editors voor designers, VR en teamwerk.",
+    en: "Portfolio of Jantina Mulder, game developer and all-round game designer. Unity, GameMaker, custom editors for designers, VR and teamwork."
+  };
+  var buttons = document.querySelectorAll(".lang button");
+  var constSvg = document.querySelector(".const");
+  var labels = { nl: "Sterrenbeeld met vijf sterren, één per project", en: "Constellation with five stars, one for each project" };
+
+  function apply(l) {
+    root.lang = l;
+    buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-set") === l)); });
+    var m = document.querySelector('meta[name="description"]');
+    if (m) m.setAttribute("content", descs[l]);
+    if (constSvg) constSvg.setAttribute("aria-label", labels[l]);
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var l = b.getAttribute("data-set");
+      apply(l);
+      try { localStorage.setItem("lang", l); } catch (e) {}
+    });
+  });
+
+  apply(root.lang === "en" ? "en" : "nl");
+
+  var reviewsBox = document.querySelector(".reviews");
+  if (reviewsBox) {
+    var track = reviewsBox.querySelector(".review-track");
+    var quotes = reviewsBox.querySelectorAll(".review-quote");
+    var dots = reviewsBox.querySelectorAll(".review-dots button");
+    var idx = 0;
+    var AUTOPLAY_MS = 6000;
+    var timer = null;
+
+    function showReview(i) {
+      idx = (i + quotes.length) % quotes.length;
+      track.style.transform = "translateX(-" + (idx * 100) + "%)";
+      dots.forEach(function (d, n) { d.classList.toggle("is-active", n === idx); });
+    }
+    function restartAutoplay() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(function () { showReview(idx + 1); }, AUTOPLAY_MS);
+    }
+    reviewsBox.querySelector(".review-prev").addEventListener("click", function () { showReview(idx - 1); restartAutoplay(); });
+    reviewsBox.querySelector(".review-next").addEventListener("click", function () { showReview(idx + 1); restartAutoplay(); });
+    dots.forEach(function (d, n) { d.addEventListener("click", function () { showReview(n); restartAutoplay(); }); });
+
+    showReview(0);
+    restartAutoplay();
+  }
+
+  var themeBtn = document.getElementById("theme-toggle");
+  function applyThemeState() {
+    var isDark = root.getAttribute("data-theme") === "dark";
+    if (themeBtn) themeBtn.setAttribute("aria-pressed", String(isDark));
+  }
+  applyThemeState();
+  if (themeBtn) {
+    themeBtn.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      applyThemeState();
+      try { localStorage.setItem("theme", next); } catch (e) {}
+    });
+  }
+})();
+</script>
+</body>
+</html>
